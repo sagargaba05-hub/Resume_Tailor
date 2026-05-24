@@ -1,0 +1,121 @@
+name: Tailor Resume
+
+on:
+  repository_dispatch:
+    types: [tailor_resume]
+  workflow_dispatch:
+    inputs:
+      id:
+        description: "Request id (any unique string)"
+        required: true
+      jd:
+        description: "Job description text"
+        required: true
+      company:
+        description: "Target company"
+        required: false
+      role:
+        description: "Target role"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tailor-resume-${{ github.event.client_payload.id || github.event.inputs.id }}
+  cancel-in-progress: false
+
+jobs:
+  tailor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install npm deps
+        run: npm install --no-audit --no-fund
+
+      - name: Install Playwright Chromium
+        run: npx --yes playwright install --with-deps chromium
+
+      - name: Write request payload to disk
+        id: payload
+        env:
+          PAYLOAD: ${{ toJson(github.event.client_payload) }}
+          DISPATCH_ID: ${{ github.event.inputs.id }}
+          DISPATCH_JD: ${{ github.event.inputs.jd }}
+          DISPATCH_COMPANY: ${{ github.event.inputs.company }}
+          DISPATCH_ROLE: ${{ github.event.inputs.role }}
+        run: |
+          mkdir -p tailored
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            printf '%s' "$PAYLOAD" > /tmp/payload.json
+          else
+            jq -n \
+              --arg id "$DISPATCH_ID" \
+              --arg jd "$DISPATCH_JD" \
+              --arg company "$DISPATCH_COMPANY" \
+              --arg role "$DISPATCH_ROLE" \
+              '{id:$id, jd:$jd, company:$company, role:$role, resume_text:""}' > /tmp/payload.json
+          fi
+          REQ_ID=$(jq -r '.id' /tmp/payload.json)
+          echo "req_id=$REQ_ID" >> "$GITHUB_OUTPUT"
+          echo "Request id: $REQ_ID"
+
+      - name: Run tailor-cv.mjs
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: ${{ vars.ANTHROPIC_MODEL || 'claude-sonnet-4-6' }}
+        run: node scripts/tailor-cv.mjs --payload /tmp/payload.json --out-dir tailored
+
+      - name: Commit results
+        env:
+          REQ_ID: ${{ steps.payload.outputs.req_id }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tailored/
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "tailor: generate resume for request ${REQ_ID}"
+            for i in 1 2 3; do
+              git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+              if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+                break
+              fi
+              sleep $((i * 5))
+            done
+          fi
+
+      - name: On failure — write error status
+        if: failure()
+        env:
+          REQ_ID: ${{ steps.payload.outputs.req_id }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          mkdir -p tailored
+          jq -n \
+            --arg id "${REQ_ID:-unknown}" \
+            --arg url "$RUN_URL" \
+            '{id:$id, status:"error", message:("Workflow failed. See " + $url), timestamp: now | todate}' \
+            > "tailored/status-${REQ_ID:-unknown}.json"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tailored/
+          git commit -m "tailor: error status for ${REQ_ID:-unknown}" || true
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" || true
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              break
+            fi
+            sleep $((i * 5))
+          done

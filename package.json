@@ -1,0 +1,14 @@
+{
+  "name": "resume-tailor",
+  "version": "1.0.0",
+  "description": "Self-serve resume tailoring page (GitHub Pages + Actions).",
+  "scripts": {
+    "tailor": "node scripts/tailor-cv.mjs",
+    "pdf": "node generate-pdf.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "playwright": "^1.58.1",
+    "docx": "^9.0.0"
+  }
+}

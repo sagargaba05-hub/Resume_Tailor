@@ -1,0 +1,85 @@
+# Resume Tailor Profile -- Sagar Gaba
+# Single source of truth for personalization across the pipeline.
+
+candidate:
+  full_name: "Sagar Gaba"
+  title_line: "Senior Program / Portfolio Manager — Banking & Regulatory Change | Digital Identity, KYC/KYB, Operational Resilience (CPS 230)"
+  email: "sagargaba05@gmail.com"
+  phone: "040-512-5409"
+  location: "Sydney, NSW 2140, Australia"
+  work_rights: "Australian Permanent Resident — no sponsorship required"
+  linkedin: "https://www.linkedin.com/in/sagar-gaba-13299220"
+  linkedin_display: "linkedin.com/in/sagar-gaba-13299220"
+  portfolio_url: ""
+  github: ""
+
+experience_summary:
+  years_total: 15
+  portfolio_size_ftes: 100
+  portfolio_revenue_aud: "$10M"
+  largest_project_value_aud: "$5M"
+  current_employer: "Infosys Ltd."
+  current_client: "Westpac"
+  current_lob: "Consumer Digital - Digital Identity"
+
+target_roles:
+  primary:
+    - "Senior Project Manager"
+    - "Program Manager"
+    - "Portfolio Manager"
+    - "Technology Service Owner"
+    - "Service Delivery Manager"
+    - "Agile Delivery Lead"
+  archetypes:
+    - { name: "Program Manager",          level: "Senior/Staff", fit: "primary" }
+    - { name: "Portfolio Manager",        level: "Senior/Staff", fit: "primary" }
+    - { name: "Senior Project Manager",   level: "Senior",       fit: "primary" }
+    - { name: "Service Delivery Manager", level: "Senior",       fit: "primary" }
+    - { name: "Agile Delivery Lead",      level: "Senior",       fit: "primary" }
+    - { name: "Technology Service Owner", level: "Senior",       fit: "primary" }
+
+narrative:
+  headline: "Senior Program / Portfolio Manager embedded at Westpac, delivering regulatory and digital change in the Consumer Digital Digital-Identity portfolio."
+  exit_story: "Embedded at Westpac since 2017 via Infosys; currently Service Delivery Manager for the ~$10M annual Digital Identity portfolio with ~100 FTE. Delivered Multi-Director KYB Onboarding ($2M), BT Customer Migration & KYC ($3M), and Oracle Banking Home-Loan Integration ($5M)."
+  superpowers:
+    - "Regulatory program delivery: KYC, KYB, AML/CTF, APRA CPS 230 operational resilience"
+    - "End-to-end delivery of $2M-$5M Australian banking programs (Westpac client side)"
+    - "Service delivery leadership at ~100-FTE scale across portfolios up to $10M annual run-rate"
+    - "Digital Identity domain depth (multi-director KYB, customer migration KYC, onboarding)"
+    - "Hybrid agile/waterfall delivery in APRA-regulated banking environments"
+    - "Vendor and third-party governance, financial forecasting, executive stakeholder reporting"
+    - "API and legacy system integration delivery (Oracle Banking, PeopleSoft)"
+  proof_points:
+    - { name: "Multi-Director Digital Onboarding", hero_metric: "Enabled multi-director KYB onboarding via Westpac digital channels" }
+    - { name: "BT Enablement", hero_metric: "Integration and KYC onboarding for BT customers via digital channels" }
+    - { name: "Oracle Banking Integration", hero_metric: "Home-loan integration, APIs, UAT, and implementation planning" }
+
+certifications: []   # populate when obtained (PMP / PRINCE2 / SAFe / Scrum / etc.)
+
+tools_systems:
+  - "Jira"
+  - "Confluence"
+  - "Microsoft Project"
+  - "Microsoft Suite"
+  - "POSTMAN"
+  - "SOAP UI"
+  - "SharePoint"
+  - "Oracle Banking"
+  - "PeopleSoft"
+  - "Oracle Sales Cloud"
+
+compensation:
+  target_range: "$150K-250K"
+  currency: "AUD"
+  minimum: "$150K"
+  location_flexibility: "Remote preferred; hybrid/on-site Sydney OK"
+
+location:
+  country: "Australia"
+  city: "Sydney"
+  timezone: "AEST"
+  visa_status: "No sponsorship needed"
+
+cv:
+  output_format: "html"
+  template_style: "banking_fs_program_manager"

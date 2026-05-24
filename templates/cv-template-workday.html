@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{NAME}} - CV</title>
+<style>
+  /* ATS-FRIENDLY PLAIN TEMPLATE
+     - Single-column only (Workday/Greenhouse parsers scramble multi-column)
+     - System fonts only (no @font-face, no Google Fonts)
+     - No icons, no chips, no gradients, no SVG, no images
+     - Standard section headers Workday maps to schema fields
+     - MM/YYYY or Month YYYY dates (handled in JSON)
+     - Contact info in body, not header/footer (Workday sometimes skips footers)
+  */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: "Calibri", "Arial", "Helvetica", sans-serif;
+    font-size: 11pt;
+    line-height: 1.35;
+    color: #000;
+    background: #fff;
+  }
+  .page {
+    width: 100%;
+    max-width: {{PAGE_WIDTH}};
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  /* HEADER */
+  .header { margin-bottom: 12px; }
+  .header h1 {
+    font-family: "Calibri", "Arial", sans-serif;
+    font-size: 18pt;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 3px;
+    letter-spacing: 0;
+  }
+  .header .subtitle {
+    font-size: 11pt;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 4px;
+  }
+  .header .contact-row {
+    font-size: 10pt;
+    color: #000;
+    line-height: 1.4;
+  }
+  .header .contact-row a { color: #000; text-decoration: none; }
+
+  /* SECTIONS */
+  .section { margin-bottom: 12px; }
+  .section-title {
+    font-family: "Calibri", "Arial", sans-serif;
+    font-size: 11.5pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #000;
+    border-bottom: 1px solid #000;
+    padding-bottom: 2px;
+    margin-bottom: 6px;
+  }
+
+  .summary-text {
+    font-size: 10.5pt;
+    line-height: 1.4;
+    color: #000;
+  }
+
+  /* COMPETENCIES — plain inline list, not chips */
+  .competencies-text { font-size: 10.5pt; line-height: 1.5; color: #000; }
+
+  /* EXPERIENCE — Title line / Company, Location / Dates (per Workday) */
+  .job { margin-bottom: 10px; break-inside: avoid; page-break-inside: avoid; }
+  .job-role { font-size: 11pt; font-weight: 700; color: #000; }
+  .job-company { font-size: 10.5pt; font-weight: 600; color: #000; }
+  .job-period  { font-size: 10pt;   font-weight: 400; color: #000; }
+  .job-scope   { font-size: 10pt;   font-style: italic; color: #000; margin-top: 2px; margin-bottom: 4px; }
+  .job ul { padding-left: 18px; margin-top: 2px; }
+  .job li { font-size: 10pt; line-height: 1.4; color: #000; margin-bottom: 3px; }
+
+  /* KEY PROJECTS */
+  .project { margin-bottom: 8px; break-inside: avoid; page-break-inside: avoid; }
+  .project-title { font-size: 10.5pt; font-weight: 700; color: #000; }
+  .project-meta  { font-size: 10pt; color: #000; margin: 1px 0 2px 0; }
+  .project-desc  { font-size: 10pt; color: #000; line-height: 1.4; }
+
+  /* EDUCATION / CERTIFICATIONS */
+  .edu-item, .cert-item { margin-bottom: 4px; break-inside: avoid; }
+  .edu-title, .cert-title { font-size: 10.5pt; font-weight: 600; color: #000; }
+  .edu-org, .cert-org   { font-size: 10.5pt; color: #000; }
+  .edu-year, .cert-year { font-size: 10pt;   color: #000; }
+
+  /* TOOLS */
+  .tools-text { font-size: 10.5pt; line-height: 1.5; color: #000; }
+
+  /* HIGHLIGHTS / CERTIFICATIONS as plain bullets */
+  .highlights ul, .cert-list { padding-left: 18px; margin-top: 2px; }
+  .highlights li, .cert-list li { font-size: 10pt; line-height: 1.4; color: #000; margin-bottom: 3px; }
+
+  /* PRINT */
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { padding: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <h1>{{NAME}}</h1>
+    <div class="subtitle">{{TITLE_LINE}}</div>
+    <div class="contact-row">
+      {{PHONE}}{{EMAIL}} | <a href="{{LINKEDIN_URL}}">{{LINKEDIN_DISPLAY}}</a> | {{LOCATION}}
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">{{SECTION_SUMMARY}}</div>
+    <div class="summary-text">{{SUMMARY_TEXT}}</div>
+  </div>
+
+  <div class="section highlights">
+    <div class="section-title">{{SECTION_HIGHLIGHTS}}</div>
+    <ul>{{HIGHLIGHTS}}</ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">{{SECTION_COMPETENCIES}}</div>
+    <div class="competencies-text">{{COMPETENCIES}}</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">{{SECTION_EXPERIENCE}}</div>
+    {{EXPERIENCE}}
+  </div>
+
+  <div class="section">
+    <div class="section-title">{{SECTION_PROJECTS}}</div>
+    {{PROJECTS}}
+  </div>
+
+  <div class="section">
+    <div class="section-title">{{SECTION_EDUCATION}}</div>
+    {{EDUCATION}}
+  </div>
+
+  <div class="section">
+    <div class="section-title">{{SECTION_TOOLS}}</div>
+    <div class="tools-text">{{TOOLS}}</div>
+  </div>
+
+</div>
+</body>
+</html>
